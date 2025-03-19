@@ -34,9 +34,17 @@ public function getDateDeNaissance(): string {
     return $this->__dateDeNaissance;
 }
 
+public function __toString()
+{
+     return $this->getNom()." ".$this->getPrenom()." né le ".$this->getDateDeNaissance()."<br>";
+}
+
 }
 
 $p1 = new Personne("DUPONT", "Michel", "1980-02-19");
 $p2 = new Personne("DUCHEMIN", "Alice", "1985-01-17");
 
-var_dump($p1, $p2);
+
+echo $p1, $p2;
+
+
