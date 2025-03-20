@@ -23,8 +23,7 @@ class Voiture {
     private string $__marque;
     private string $__modele;
     private int $__nbPortes;
-    private int $__vitesseActuelle;
-    private int $__accelerer = 0;
+    private int $__vitesseActuelle = 0;
     private bool $__status = false;
 
 
@@ -37,29 +36,43 @@ class Voiture {
     }
 
 // METHODES 
-    public function Demarrer(): string {
+        public function demarrer(): string {
             if ($this->__status){
-                return "Le vehicule {$this->__marque} {$this->__modele} est à l'arrêt.";
-        } else {
-            $this->__status = true;
-                return "Le vehicule {$this->__marque} {$this->__modele} démarre.";
+                    return "Le vehicule $this est démarré";
+            } else {
+                $this->__status = true;
+                return "Le vehicule $this démarre.";
+            } 
         }
-    }
-    public function Stopper(): string{
+
+    public function stopper(): string{
         if($this->__status) {
-            return "Le vehicule {$this->__marque} {$this->__modele} est en route.";
+         $this->__status = false;
+         $this->__vitesseActuelle = 0;
+            return "Le vehicule $this est en train de s'arrêter.";
         } else {
-            $this->__status = true;
-            return "Le vehicule {$this->__marque} {$this->__modele} est stoppé.";
+            return "Le vehicule $this est stoppé.";
         }
     }
-        
-     public function Accelerer(int $vitesseActuelle): int{
-        $this->__accelerer + $vitesseActuelle;
-            return $this->__accelerer + $vitesseActuelle;
+
+     public function accelerer(int $vitesse) : string {
+        if($this->__status) {
+           $this->__vitesseActuelle += $vitesse;
+           return "Le vehicule $this accélère de $vitesse km/h.";
+        } else {
+         return "Pour accélerer, il faut démarrer le véhicule $this !";
         }
-
-
+       }
+       
+       public function ralentir(int $vitesse) : string {
+             if ($this->__status) {
+             $this->__vitesseActuelle -= $vitesse;
+                return "Le vehicule $this ralentis de $vitesse km/h.";
+         } else {
+            return "Pour ralentir, il faut que le voiture $this soit en train de rouler.";
+         } 
+        }
+        
 // SETTING
     public function setMarque(string $marque){
         $this->__marque = $marque;
@@ -94,38 +107,60 @@ class Voiture {
         return $this->__vitesseActuelle;
     }
 
-// AFFICHAGE
-    public function __toString() {
-        return $this->getMarque()." ".$this->getModele()." ".$this->getNbPortes()." ".$this->getVitesseActuelle()."<br>";
+    public function getStatus(): string {
+        return $this->__status ? "Démarré" : "À l'arrêt";
     }
 
-}
+// AFFICHAGE
+    public function __toString() {
+        return $this->getMarque()." ".$this->getModele();
 
+}
+}
 
 $v1 = new Voiture("Peugeot","408", 5);
 $v2 = new Voiture ("Citroën", "C4", 3);
+
+$v1->demarrer();
+$v1->accelerer(50);
+// echo $v1->getStatus();
 
 // INFOS VEHICULE 1
 
 echo "<p>Infos vehicule 1<br>
 ***************************<br>
-Nom et modèle du vehicule: ".$v1->getMarque()." ".$v1->getModele()."<br>
+Nom et modèle du vehicule: $v1 <br>
 Nombre de porte: ".$v1->getNbPortes()."<br>"
-.$v1->Demarrer(true)."<br>
-Sa vitesse actuelle est de: ".$v1->Accelerer(50)." km/h </p>";
+.$v1->demarrer()."<br>
+Sa vitesse actuelle est de: ".$v1->getVitesseActuelle()." km/h </p>";
 
 // INFOS VEHICULE 2
 
 echo "<p>Infos vehicule 2<br>
 ***************************<br>
-Nom et modèle du vehicule: ".$v2->getMarque()." ".$v2->getModele()."<br>
+Nom et modèle du vehicule: $v2 <br>
 Nombre de porte: ".$v2->getNbPortes()."<br>"
-.$v2->Stopper()."<br>
-Sa vitesse actuelle est de: ".$v2->Accelerer(0)." km/h</p>";
+.$v2->stopper()."<br>
+Sa vitesse actuelle est de: ".$v2->getVitesseActuelle()." km/h</p>";
+
+$v1->stopper();
 
 echo "<p>"
-.$v1->Demarrer(true)."<br>
-Le vehicule ".$v1->getMarque()." ".$v1->getModele()." accelère de ".$v1->Accelerer(50)." km/h<br>"
-.$v2->Stopper(true)."<br>"
+.$v1->demarrer()."<br>"
+.$v1->accelerer(50)."<br>"
+.$v2->demarrer()."<br>";
 
-;
+$v2->stopper();
+
+echo $v2->stopper()."<br>";
+
+$v2->demarrer();
+$v2->accelerer(20);
+
+echo "Le vehicule $v2 veut accélerer de ".$v2->getVitesseActuelle()." kmh/h.<br>";
+
+$v2->ralentir(20);
+
+echo
+"La vitesse du vehicule $v1 est de: ".$v1->getVitesseActuelle()." km/h.<br>
+La vitesse du vehicule $v2 est de: ".$v2->getVitesseActuelle()." km/h.</p>";
